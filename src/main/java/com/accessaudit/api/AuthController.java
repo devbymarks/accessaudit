@@ -1,0 +1,11 @@
+package com.accessaudit.api;
+import jakarta.servlet.http.*; import com.accessaudit.repo.AdminAccountRepository; import org.springframework.http.*; import org.springframework.security.authentication.*; import org.springframework.security.core.Authentication; import org.springframework.security.core.context.*; import org.springframework.security.web.context.SecurityContextRepository; import org.springframework.web.bind.annotation.*; import java.util.*;
+@RestController @RequestMapping("/api/auth")
+public class AuthController {
+ private final AuthenticationManager manager; private final SecurityContextRepository contexts; private final AdminAccountRepository accounts;
+ public AuthController(AuthenticationManager manager,SecurityContextRepository contexts,AdminAccountRepository accounts){this.manager=manager;this.contexts=contexts;this.accounts=accounts;}
+ @PostMapping("/login") public ResponseEntity<?> login(@RequestBody Map<String,String> body,HttpServletRequest request,HttpServletResponse response){try{Authentication auth=manager.authenticate(new UsernamePasswordAuthenticationToken(body.getOrDefault("username",""),body.getOrDefault("password","")));SecurityContext context=SecurityContextHolder.createEmptyContext();context.setAuthentication(auth);SecurityContextHolder.setContext(context);contexts.saveContext(context,request,response);return ResponseEntity.ok(user(auth));}catch(AuthenticationException ex){return ResponseEntity.status(401).body(Map.of("error","Usuário ou senha inválidos."));}}
+ @GetMapping("/me") public Map<String,Object> me(Authentication auth){return user(auth);}
+ @PostMapping("/logout") public ResponseEntity<?> logout(HttpServletRequest request,HttpServletResponse response){SecurityContextHolder.clearContext();if(request.getSession(false)!=null)request.getSession(false).invalidate();return ResponseEntity.ok(Map.of("ok",true));}
+ private Map<String,Object> user(Authentication auth){String role=auth.getAuthorities().stream().map(a->a.getAuthority().replace("ROLE_","")).findFirst().orElse("REQUESTER");var account=accounts.findByUsernameIgnoreCase(auth.getName()).orElseThrow();return Map.of("username",auth.getName(),"role",role,"displayName",account.getFullName(),"email",account.getEmail());}
+}

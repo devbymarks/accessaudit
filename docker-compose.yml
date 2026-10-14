@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: accessaudit-db
+    environment:
+      POSTGRES_DB: accessaudit
+      POSTGRES_USER: accessaudit
+      POSTGRES_PASSWORD: accessaudit_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - accessaudit_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U accessaudit -d accessaudit"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  app:
+    build: .
+    container_name: accessaudit-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/accessaudit
+      SPRING_DATASOURCE_USERNAME: accessaudit
+      SPRING_DATASOURCE_PASSWORD: accessaudit_dev
+    ports:
+      - "8080:8080"
+volumes:
+  accessaudit_data:
