@@ -246,23 +246,27 @@ Antes de qualquer implantação pública ou uso real, é necessário, entre outr
 * Registro de eventos de auditoria e revisão periódica de acessos.
 * Containerização e testes automatizados.
 
-
-
-* ## \## 👨‍💻 Autor
-* ## 
-* ## \*\*Matheus Marks\*\*
-* ## 
-* ## Projeto desenvolvido com foco em Governança de TI, gestão de identidades, controle de acessos e auditoria de permissões.
-* ## 
-* ## O AccessAudit busca centralizar e organizar o ciclo de vida das solicitações de acesso, incluindo aprovações, revisões periódicas e rastreabilidade das ações, contribuindo para a padronização de processos e o fortalecimento dos controles de segurança da informação.
+## 👨‍💻 Autor
 
 
 
-* ## \---
-* ## 
-* ## \## ⭐ Apoie o projeto
+**Matheus Marks**
 
-## 
 
-* ## Se este projeto foi útil para você, considere deixar uma ⭐ no repositório. 
+
+Projeto desenvolvido com foco em **Governança de TI, gestão de identidades, controle de acessos e auditoria de permissões**.
+
+
+
+O AccessAudit busca centralizar e organizar o ciclo de vida das solicitações de acesso, incluindo aprovações, revisões periódicas e rastreabilidade das ações, contribuindo para a padronização de processos e o fortalecimento dos controles de segurança da informação.
+
+
+
+\---
+
+## ⭐ Apoie o projeto
+
+
+
+Se este projeto foi útil para você, considere deixar uma ⭐ no repositório. 
 
