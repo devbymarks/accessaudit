@@ -1,161 +1,268 @@
-# AccessAudit — Identity Governance & Access Audit
+<div align="center">
 
-Plataforma demonstrativa de governança de identidades e acessos (IGA), construída para portfólio. O sistema gerencia o catálogo de pessoas, sistemas e perfis, solicitações de acesso, decisões, revisões periódicas e trilha de auditoria.
+# 🔐 AccessAudit
 
-> **Escopo e segurança:** este projeto é uma aplicação de portfólio para ambiente local. Possui autenticação de sessão e papéis para demonstrar autorização no servidor, mas ainda não é uma solução corporativa de IAM pronta para produção. Não provisiona permissões diretamente no Active Directory, Entra ID, bancos, GitLab ou outros sistemas. Antes de exposição externa, troque as credenciais de demonstração, habilite proteção CSRF, limite tentativas de login, configure HTTPS, migrações de banco, gestão de segredos e testes de segurança.
+### 🛡️ Governança de Identidades, Controle de Acessos e Auditoria
 
-## Stack
+**Uma aplicação para organizar solicitações de acesso, aprovações, revisões periódicas e rastreabilidade em ambientes de TI.**
 
-- Java 21
-- Spring Boot 3.5.5
-- Spring Web, Spring Data JPA e Spring Security
-- PostgreSQL 16
-- HTML, CSS e JavaScript puro
-- Docker Compose
-- H2 e MockMvc para testes
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge\&logo=openjdk\&logoColor=white" alt="Java 21" />
+  <img src="https://img.shields.io/badge/Spring\_Boot-3.5.5-6DB33F?style=for-the-badge\&logo=springboot\&logoColor=white" alt="Spring Boot" />
+  <img src="https://img.shields.io/badge/Spring\_Security-6DB33F?style=for-the-badge\&logo=springsecurity\&logoColor=white" alt="Spring Security" />
+  <img src="https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge\&logo=postgresql\&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge\&logo=html5\&logoColor=white" alt="HTML5" />
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge\&logo=css3\&logoColor=white" alt="CSS3" />
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge\&logo=javascript\&logoColor=black" alt="JavaScript" />
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge\&logo=docker\&logoColor=white" alt="Docker" />
+  <img src="https://img.shields.io/badge/Maven-C71A36?style=for-the-badge\&logo=apachemaven\&logoColor=white" alt="Maven" />
+</p>
 
-## Funcionalidades
+</div>
 
-### 1. Dashboard executivo
-- Solicitações totais e pendentes.
-- Acessos aprovados/ativos e solicitações rejeitadas.
-- Alertas de revisão de acesso vencida.
-- Solicitações recentes, fila de atenção e atividade de auditoria.
+\---
 
-### 2. Gestão de identidades e catálogo
-- CRUD de usuários do diretório (nome, e-mail, departamento, cargo e status).
-- CRUD de sistemas (código, descrição, responsável, criticidade e status).
-- CRUD de perfis (sistema associado, permissões, risco e status).
-- Desativação lógica para preservar histórico.
-- Validação de e-mail único e código de sistema único.
-- Solicitações vinculam perfil ativo ao sistema correto.
+## 📌 Sobre o projeto
 
-### 3. Fluxo de solicitação e aprovação
-- Solicitações de concessão (`GRANT`), alteração (`CHANGE`) e revogação (`REVOKE`).
-- Justificativa obrigatória; alteração exige perfil atual e novo perfil diferente.
-- Aprovação/rejeição por usuário autenticado com papel `ADMIN` ou `APPROVER`.
-- Rejeição exige justificativa com pelo menos cinco caracteres.
-- A concessão aprovada cria um registro de acesso ativo no inventário.
-- A alteração aprovada atualiza o perfil do acesso existente; a revogação aprovada desativa o acesso correspondente.
-- Solicitações aprovadas programam revisão em 90 dias.
-- A revogação e a revisão registram eventos de auditoria.
+O **AccessAudit** é uma aplicação desenvolvida em Java para demonstrar conceitos de **Identity Governance and Administration (IGA)** e Governança de TI. A plataforma centraliza o catálogo de usuários, sistemas e perfis de acesso, registra solicitações e decisões e mantém uma trilha de auditoria para apoiar o acompanhamento dos acessos.
 
-### 4. Revisões e auditoria
-- Fila de revisões vencidas.
-- Conclusão de revisão renova o ciclo para 90 dias.
-- Eventos de criação, decisão, revogação, revisão e alterações nos catálogos.
-- Exportação da trilha para CSV no frontend.
+O projeto foi desenvolvido para portfólio e simula processos comuns em equipes de TI, como concessão, alteração e revogação de acessos, aprovação por responsáveis e revisão periódica de permissões.
 
-### 5. Autenticação e papéis
-- Login com sessão HTTP no backend.
-- `ADMIN`: gerencia usuários do diretório, sistemas e perfis; pode aprovar/rejeitar, revogar e revisar.
-- `APPROVER`: pode aprovar/rejeitar, revogar e revisar.
-- `REQUESTER`: pode consultar os dados e registrar solicitações.
-- O responsável registrado para decisões/cadastros é obtido da sessão autenticada, não confiado ao nome enviado pelo navegador.
+## 🎯 Problema que resolve
 
-## Executar no Windows (recomendado)
+Em muitos ambientes, solicitações e permissões podem ficar espalhadas por planilhas, mensagens e processos manuais. Isso dificulta saber quem solicitou um acesso, quem aprovou, quais permissões estão ativas e quando elas precisam ser revisadas.
 
-Requisitos: Docker Desktop instalado e iniciado, conexão com a internet na primeira construção.
+O AccessAudit reúne essas informações em um único lugar, oferecendo mais organização, visibilidade e rastreabilidade do processo.
 
-1. Extraia o ZIP.
-2. Abra a pasta `accessaudit`.
-3. Execute `INICIAR-WINDOWS.bat`, ou abra PowerShell nessa pasta e rode:
+## ✨ Funcionalidades
 
-```powershell
+### 📊 Dashboard executivo
+
+* Visão geral das solicitações e pendências.
+* Indicadores de acessos ativos/aprovados e solicitações rejeitadas.
+* Alertas de revisões de acesso vencidas.
+* Solicitações recentes e atividades de auditoria.
+
+### 🗂️ Gestão de catálogo
+
+* Cadastro e manutenção de usuários do diretório.
+* Cadastro de sistemas e responsáveis.
+* Cadastro de perfis, permissões, criticidade e status.
+* Desativação lógica de registros para preservar o histórico.
+
+### 📝 Solicitações e aprovações
+
+* Solicitações de concessão, alteração e revogação de acesso.
+* Registro de justificativas.
+* Aprovação ou rejeição por usuários autorizados.
+* Atualização do inventário de acessos após decisões aprovadas.
+* Registro de eventos relevantes para auditoria.
+
+### 🔍 Revisão de acessos
+
+* Identificação de acessos com revisão vencida.
+* Registro da conclusão da revisão.
+* Renovação do ciclo de revisão após sua conclusão.
+
+### 🔑 Autenticação e autorização
+
+* Autenticação por sessão HTTP.
+* Controle de permissões por papel: `ADMIN`, `APPROVER` e `REQUESTER`.
+* Validação de ações autorizadas no backend.
+
+### 🧾 Auditoria e relatórios
+
+* Histórico de eventos relacionados a solicitações e catálogos.
+* Consulta à trilha de auditoria.
+* Exportação dos eventos de auditoria para CSV pela interface.
+
+## 🧰 Tecnologias utilizadas
+
+|Tecnologia|Utilização|
+|-|-|
+|☕ Java 21|Linguagem principal|
+|🍃 Spring Boot 3.5.5|Estrutura da aplicação Backend|
+|🌐 Spring Web|Construção da API REST|
+|🔐 Spring Security|Autenticação e autorização|
+|🗃️ Spring Data JPA / Hibernate|Persistência e mapeamento de dados|
+|🐘 PostgreSQL 16|Banco de dados principal|
+|🎨 HTML5, CSS3 e JavaScript|Interface web|
+|🐳 Docker e Docker Compose|Containerização e execução local|
+|🧪 H2, JUnit e MockMvc|Apoio aos testes automatizados|
+|📦 Maven|Gerenciamento de dependências e build|
+
+## 🏗️ Arquitetura
+
+A aplicação segue uma separação por responsabilidades:
+
+* **API:** recebe as requisições HTTP e disponibiliza os endpoints.
+* **Services:** concentra as regras de negócio e os fluxos de acesso.
+* **Models:** representa as entidades do domínio.
+* **Repositories:** realiza as operações de persistência.
+* **Security:** configura autenticação, sessão e autorização.
+* **Frontend:** fornece a interface web para interação com a aplicação.
+
+## 📁 Estrutura do projeto
+
+```text
+accessaudit/
+├── Dockerfile
+├── docker-compose.yml
+├── INICIAR-WINDOWS.bat
+├── pom.xml
+├── scripts/
+│   └── smoke-test.py
+└── src/
+    ├── main/
+    │   ├── java/com/accessaudit/
+    │   │   ├── api/          # Controllers e endpoints REST
+    │   │   ├── model/        # Entidades da aplicação
+    │   │   ├── repo/         # Repositórios de dados
+    │   │   ├── security/     # Configurações de segurança
+    │   │   └── service/      # Regras de negócio
+    │   └── resources/
+    │       ├── application.properties
+    │       └── static/       # HTML, CSS e JavaScript
+    └── test/
+        ├── java/            # Testes automatizados
+        └── resources/       # Configuração dos testes
+```
+
+## 🚀 Como executar
+
+### 🐳 Opção 1 — Windows com Docker (recomendada)
+
+**Pré-requisitos:** Docker Desktop instalado e em execução. É necessária conexão com a internet para baixar imagens e construir a aplicação na primeira execução.
+
+1. Baixe ou clone este repositório.
+2. Extraia os arquivos, se necessário, e abra a pasta do projeto.
+3. Execute `INICIAR-WINDOWS.bat` ou abra um terminal na raiz e rode:
+
+```bash
 docker compose up --build
 ```
 
-4. Aguarde o build Maven e o banco ficarem prontos.
-5. Acesse `http://localhost:8080`.
+4. Aguarde a inicialização da aplicação e do banco de dados.
+5. Acesse [http://localhost:8080](http://localhost:8080).
 
-O PostgreSQL é exposto na porta `5433` do Windows para evitar conflito com instalações locais. Dentro do Compose, a aplicação se conecta ao serviço `db` na porta `5432`.
+O PostgreSQL fica disponível na porta `5433` do computador host, enquanto a aplicação se conecta ao banco pela porta `5432` dentro da rede Docker.
 
-Parar os serviços: `Ctrl+C` e depois `docker compose down`. Para apagar também os dados locais do banco, use `docker compose down -v` — **isso remove permanentemente os dados desse volume**.
+Para encerrar, pressione `Ctrl+C` e execute:
 
-## Contas de demonstração
+```bash
+docker compose down
+```
 
-| Papel | Usuário | Senha |
-|---|---|---|
-| Administrador | `admin` | `AccessAudit@2026` |
-| Aprovador | `aprovador` | `Aprova@2026` |
-| Solicitante | `solicitante` | `Solicita@2026` |
+> \*\*Atenção:\*\* `docker compose down -v` também remove o volume do banco de dados e apaga permanentemente os dados locais armazenados nele.
 
-As contas são criadas automaticamente apenas quando a tabela de contas está vazia. Elas são credenciais de demonstração, não use essas senhas em um ambiente público. O sistema não oferece uma tela de gestão de contas de login nem fluxo de recuperação de senha nesta versão.
+### 💻 Opção 2 — Execução local sem Docker
 
-## Executar sem Docker
+**Pré-requisitos:** JDK 21, Maven 3.9+ e PostgreSQL 16.
 
-Requisitos: JDK 21, Maven 3.9+ e PostgreSQL 16. Crie o banco `accessaudit`, usuário `accessaudit` e senha `accessaudit_dev`, ou configure as variáveis `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME` e `SPRING_DATASOURCE_PASSWORD`.
+Configure o banco de dados e as variáveis de ambiente abaixo conforme seu ambiente:
+
+* `SPRING\_DATASOURCE\_URL`
+* `SPRING\_DATASOURCE\_USERNAME`
+* `SPRING\_DATASOURCE\_PASSWORD`
+
+Na raiz do projeto, execute:
 
 ```bash
 mvn test
 mvn spring-boot:run
 ```
 
-Para desenvolvimento sem PostgreSQL, pode-se configurar H2 manualmente; a suíte de testes usa H2 em memória.
+## 🧪 Contas de demonstração
 
-## Testes
+|Perfil|Usuário|Senha|
+|-|-|-|
+|Administrador|`admin`|`AccessAudit@2026`|
+|Aprovador|`aprovador`|`Aprova@2026`|
+|Solicitante|`solicitante`|`Solicita@2026`|
 
-Na raiz do projeto:
+As contas demonstrativas são criadas automaticamente quando ainda não há contas cadastradas.
+
+> \*\*Segurança:\*\* essas credenciais são destinadas somente ao ambiente local de demonstração. Não exponha a aplicação publicamente com as credenciais padrão.
+
+## 👥 Perfis de acesso
+
+|Papel|Responsabilidades principais|
+|-|-|
+|`ADMIN`|Gerenciar usuários do diretório, sistemas e perfis; aprovar ou rejeitar solicitações; revogar e revisar acessos.|
+|`APPROVER`|Aprovar ou rejeitar solicitações, revogar acessos e realizar revisões.|
+|`REQUESTER`|Consultar informações disponíveis e registrar solicitações de acesso.|
+
+## ✅ Testes
+
+Para executar a suíte de testes automatizados:
 
 ```bash
 mvn test
 ```
 
-Os testes incluem inicialização do contexto, login e sessão, proteção de endpoints, criação/aprovação/revisão, trilha de auditoria, catálogos e métricas do dashboard.
+O projeto inclui testes para inicialização, autenticação, autorização, APIs de acesso, decisões, revisões, catálogos, auditoria e indicadores do dashboard.
 
-Com o sistema em execução, também é possível fazer um smoke test do fluxo básico:
+Com a aplicação em execução, também é possível rodar o teste de fumaça do fluxo principal:
 
 ```powershell
-python .\scripts\smoke-test.py
+python .\\scripts\\smoke-test.py
 ```
 
-O smoke test cria uma solicitação de teste, aprova, consulta auditoria e conclui uma revisão. Ele deixa registros de teste no banco; remova-os pela interface se desejar.
+Esse script cria registros de teste no banco, aprova uma solicitação, consulta a auditoria e conclui uma revisão. Os registros gerados podem precisar ser removidos manualmente depois.
 
-## Endpoints principais
+## 🔌 Principais endpoints da API
 
-### Sessão
-- `POST /api/auth/login` — `{"username":"admin","password":"..."}`
-- `GET /api/auth/me`
-- `POST /api/auth/logout`
+|Área|Endpoints de exemplo|
+|-|-|
+|Autenticação|`POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout`|
+|Dashboard|`GET /api/dashboard`|
+|Solicitações|`GET /api/requests`, `POST /api/requests`, `POST /api/requests/{id}/decision`|
+|Acessos e revisões|`GET /api/accesses`, `GET /api/reviews`, `POST /api/accesses/{id}/review`|
+|Catálogos|`/api/users`, `/api/systems`, `/api/profiles`|
+|Auditoria|`GET /api/audit` e endpoints de auditoria de solicitações|
 
-### Solicitações
-- `GET /api/dashboard`
-- `GET /api/requests`
-- `POST /api/requests`
-- `POST /api/requests/{id}/decision`
-- `POST /api/requests/{id}/revoke`
-- `GET /api/reviews` — acessos ativos com revisão vencida
-- `GET /api/accesses` — inventário de acessos concedidos
-- `POST /api/accesses/{id}/review`
-- `GET /api/requests/{id}/audit`
+Consulte os controllers em `src/main/java/com/accessaudit/api/` para verificar os detalhes de cada endpoint e seus parâmetros.
 
-### Catálogos
-- `GET/POST /api/users`, `PUT/DELETE /api/users/{id}`
-- `GET/POST /api/systems`, `PUT/DELETE /api/systems/{id}`
-- `GET/POST /api/profiles`, `PUT/DELETE /api/profiles/{id}`
-- `GET /api/audit`
+## ⚠️ Limitações e segurança
 
-`DELETE` nos catálogos é uma desativação lógica, para preservar a trilha e referências históricas.
+O AccessAudit é um **projeto de portfólio para execução local**, não uma solução corporativa pronta para produção. Nesta versão, o sistema demonstra fluxos de governança e auditoria, mas **não provisiona nem remove permissões diretamente** em Active Directory, Microsoft Entra ID, bancos de dados, GitLab ou outros sistemas externos.
 
-## Estrutura
+Antes de qualquer implantação pública ou uso real, é necessário, entre outras medidas:
 
-```text
-accessaudit/
-├── .editorconfig
-├── .gitignore
-├── .dockerignore
-├── Dockerfile
-├── docker-compose.yml
-├── pom.xml
-├── INICIAR-WINDOWS.bat
-├── scripts/smoke-test.py
-└── src/
-    ├── main/java/com/accessaudit/
-    │   ├── api/          # API REST e sessão
-    │   ├── model/        # Entidades JPA
-    │   ├── repo/         # Repositórios
-    │   ├── security/     # Spring Security e sessão
-    │   └── service/      # Regras de negócio
-    ├── main/resources/static/ # Frontend
-    └── test/             # Testes de integração
-```
+* substituir as credenciais e segredos de demonstração;
+* configurar HTTPS e proteção CSRF adequada;
+* limitar tentativas de autenticação e revisar a gestão de sessões;
+* adotar migrações controladas do banco de dados;
+* revisar permissões, logs, tratamento de erros e configurações de segurança;
+* executar testes de segurança e validar os requisitos do ambiente.
+
+## 🎓 Competências demonstradas
+
+* Desenvolvimento de APIs REST com Java e Spring Boot.
+* Organização de código por camadas e responsabilidades.
+* Modelagem de dados e persistência com PostgreSQL/JPA.
+* Autenticação e autorização baseada em papéis.
+* Implementação de regras de negócio para solicitações e aprovações.
+* Registro de eventos de auditoria e revisão periódica de acessos.
+* Containerização e testes automatizados.
+
+
+
+* ## \## 👨‍💻 Autor
+* ## 
+* ## \*\*Matheus Marks\*\*
+* ## 
+* ## Projeto desenvolvido com foco em Governança de TI, gestão de identidades, controle de acessos e auditoria de permissões.
+* ## 
+* ## O AccessAudit busca centralizar e organizar o ciclo de vida das solicitações de acesso, incluindo aprovações, revisões periódicas e rastreabilidade das ações, contribuindo para a padronização de processos e o fortalecimento dos controles de segurança da informação.
+
+
+
+* ## \---
+* ## 
+* ## \## ⭐ Apoie o projeto
+
+## 
+
+* ## Se este projeto foi útil para você, considere deixar uma ⭐ no repositório. 
+
