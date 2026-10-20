@@ -20,7 +20,7 @@
 
 </div>
 
-\---
+---
 
 ## 📌 Sobre o projeto
 
@@ -259,10 +259,6 @@ Projeto desenvolvido com foco em **Governança de TI, gestão de identidades, co
 
 
 O AccessAudit busca centralizar e organizar o ciclo de vida das solicitações de acesso, incluindo aprovações, revisões periódicas e rastreabilidade das ações, contribuindo para a padronização de processos e o fortalecimento dos controles de segurança da informação.
-
-
-
-\---
 
 ## ⭐ Apoie o projeto
 
